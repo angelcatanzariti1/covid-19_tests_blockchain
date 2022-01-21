@@ -17,8 +17,8 @@ contract OMS_COVID{
     //Authorization status for health centers to create their own smart contract
     mapping(address => bool) public HealthCentersStatus;
 
-    //Address array to store validated health centers contracts
-    address[] public health_centers_contracts;
+    //Mapping to store each Health Center's address
+    mapping(address => address) public health_centers_contracts;
 
     //Events
     event NewHealthCenter(address);
@@ -47,7 +47,7 @@ contract OMS_COVID{
     function ViewRequests() public view OwnerOnly(msg.sender) returns(address[] memory){
         return requests;
     }
-    
+
     //Authorize new Health Centers
     function HealthCenters(address _healthCenter) public OwnerOnly(msg.sender){
         //Set status to HC
@@ -71,7 +71,7 @@ contract OMS_COVID{
         address HC_contract = address(new HealthCenter(msg.sender));
 
         //Store contract address in array
-        health_centers_contracts.push(HC_contract);
+        health_centers_contracts[msg.sender] = HC_contract;
 
         //Event
         emit NewContract(HC_contract, msg.sender);
@@ -83,6 +83,7 @@ contract OMS_COVID{
 
 contract HealthCenter{
 
+    //Initial declarations
     address public HC_address;
     address public ContractAddress;
 
