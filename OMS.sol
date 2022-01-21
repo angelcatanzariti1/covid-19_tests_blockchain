@@ -28,8 +28,14 @@ contract OMS_COVID{
         _;
     }
 
+    //Authorize new Health Centers
+    function HealthCenters(address _healthCenter) public OwnerOnly(msg.sender);{
+        //Set status to HC
+        HealthCenterStatus[_healthCenter] = true;
 
-
+        //Emit event
+        emit NewHealthCenter(_healthCenter);
+    }
 
 
 
