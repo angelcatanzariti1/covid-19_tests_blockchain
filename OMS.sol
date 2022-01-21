@@ -93,19 +93,36 @@ contract HealthCenter{
         ContractAddress = address(this);
     }
 
-    //Mapping of patient's ID (hash) => COVID test results
-    mapping(bytes32 => bool) COVIDTestResults;
+    //Results struct
+    struct COVIDTestResults{
+        uint256 testID;
+        uint256 date;
+        bool result;
+        string file_IPFS;
+    }
 
-    //Mapping of test hash => IPFS code of PDF
-    mapping(bytes32 => string) PCR_Result_IPFS;
+    //Patient => results
+    mapping(bytes32 => COVIDTestResults[]) PatientResults;
 
     //Events
-    event NewResult(string, bool);
+    event NewResult(bool, string);
 
     //Restrict functions to health center
     modifier HCOnly(address _address){
         require(_address == HC_address, "Forbidden.");
         _;
+    }
+
+    //Test results (date in unix timestamp, convert in frontend)
+    function LoadCOVIDTestResults(uint256 _testID, uint256 _testDate, string memory _patientID, bool _testResult, string memory _IPFScode) public HCOnly(msg.sender){
+        //Patient's ID hash
+        bytes32 hash_patientID = keccak256(abi.encodePacked(_patientID));
+
+        //Patient -> result
+        PatientResults[hash_patientID].push(COVIDTestResults(_testID, _testDate, _testResult, _IPFScode));
+
+        //Event
+        emit NewResult(_testResult, _IPFScode);
     }
 
 
