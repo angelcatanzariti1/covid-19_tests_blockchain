@@ -103,7 +103,6 @@ contract HealthCenter{
 
     /*
         Patient => results array
-        A patient's address hash is stored.
         a single patient can have multiple tests stored, identified by ID and date
         dates are managed as timestamps, a conversion is needed in frontend
     */
