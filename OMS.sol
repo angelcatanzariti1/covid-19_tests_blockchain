@@ -13,7 +13,7 @@ contract OMS_COVID{
     }
 
     //Authorization status for health centers to create their own smart contract
-    mapping(address => bool) HealtCentersStatus;
+    mapping(address => bool) HealthCentersStatus;
 
     //Address array to store validated health centers contracts
     address[] public health_centers_contracts;
@@ -29,9 +29,9 @@ contract OMS_COVID{
     }
 
     //Authorize new Health Centers
-    function HealthCenters(address _healthCenter) public OwnerOnly(msg.sender);{
+    function HealthCenters(address _healthCenter) public OwnerOnly(msg.sender){
         //Set status to HC
-        HealthCenterStatus[_healthCenter] = true;
+        HealthCentersStatus[_healthCenter] = true;
 
         //Emit event
         emit NewHealthCenter(_healthCenter);
