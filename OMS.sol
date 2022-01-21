@@ -43,12 +43,11 @@ contract OMS_COVID{
         emit NewAccessRequest(msg.sender);
     }
 
-    //View Access Requests
+    //View Access Requests (OMS only)
     function ViewRequests() public view OwnerOnly(msg.sender) returns(address[] memory){
         return requests;
     }
-
-
+    
     //Authorize new Health Centers
     function HealthCenters(address _healthCenter) public OwnerOnly(msg.sender){
         //Set status to HC
@@ -56,6 +55,11 @@ contract OMS_COVID{
 
         //Emit event
         emit NewHealthCenter(_healthCenter);
+    }
+
+    //Check authorization status
+    function AuthorizationStatus() public view returns(bool){
+        return HealthCentersStatus[msg.sender];
     }
 
     //Factory to create smart contracts for each health center
