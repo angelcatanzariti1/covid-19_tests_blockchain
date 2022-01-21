@@ -2,6 +2,8 @@
 pragma solidity >0.7.0 <=0.8.11;
 pragma experimental ABIEncoderV2;
 
+//------------------------------------- OMS ---------------------------------------------
+
 contract OMS_COVID{
 
     //Owner address
@@ -28,6 +30,7 @@ contract OMS_COVID{
         _;
     }
 
+
     //Authorize new Health Centers
     function HealthCenters(address _healthCenter) public OwnerOnly(msg.sender){
         //Set status to HC
@@ -37,8 +40,34 @@ contract OMS_COVID{
         emit NewHealthCenter(_healthCenter);
     }
 
+    //Factory to create smart contracts for each health center
+    function FactoryHealthCenter() public{
+        //Only authorized HC must be able to run this
+        require(HealthCentersStatus[msg.sender], "Health Center not authorized.");
 
+        //Generate smart contract
+        address HC_contract = address(new HealthCenter(msg.sender));
 
+        //Store contract address in array
+        health_centers_contracts.push(HC_contract);
 
+        //Event
+        emit NewContract(HC_contract, msg.sender);
+
+    }
+}
+
+//------------------------------------- HEALTH CENTERS ---------------------------------
+
+contract HealthCenter{
+
+    address public HC_address;
+    address public ContractAddress;
+
+    //Constructor
+    constructor(address _address){
+        HC_address = _address;
+        ContractAddress = address(this);
+    }
 
 }
