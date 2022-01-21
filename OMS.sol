@@ -12,5 +12,21 @@ contract OMS_COVID{
         OMS = msg.sender;
     }
 
+    //Authorization status for health centers to create their own smart contract
+    mapping(address => bool) HealtCentersStatus;
+
+    //Address array to store validated health centers contracts
+    address[] public health_centers_contracts;
+
+    //Events
+    event NewHealthCenter(address);
+    event NewContract(address, address); //contract, owner
+    
+
+
+
+
+
+
 
 }
