@@ -22,6 +22,12 @@ contract OMS_COVID{
     event NewHealthCenter(address);
     event NewContract(address, address); //contract, owner
     
+    //Modifier to allow only the owner to call certain functions
+    modifier OwnerOnly(address _address){
+        require(_address == OMS, "Forbidden.");
+        _;
+    }
+
 
 
 
