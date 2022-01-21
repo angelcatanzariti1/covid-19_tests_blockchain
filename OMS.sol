@@ -15,7 +15,7 @@ contract OMS_COVID{
     }
 
     //Authorization status for health centers to create their own smart contract
-    mapping(address => bool) HealthCentersStatus;
+    mapping(address => bool) public HealthCentersStatus;
 
     //Address array to store validated health centers contracts
     address[] public health_centers_contracts;
@@ -23,11 +23,29 @@ contract OMS_COVID{
     //Events
     event NewHealthCenter(address);
     event NewContract(address, address); //contract, owner
+    event NewAccessRequest(address);
     
     //Modifier to allow only the owner to call certain functions
     modifier OwnerOnly(address _address){
         require(_address == OMS, "Forbidden.");
         _;
+    }
+
+    //Array to store access Requests
+    address[] requests;
+
+    //Request access
+    function RequestAccess() public{
+        //Store request
+        requests.push(msg.sender);
+
+        //Event
+        emit NewAccessRequest(msg.sender);
+    }
+
+    //View Access Requests
+    function ViewRequests() public view OwnerOnly(msg.sender) returns(address[] memory){
+        return requests;
     }
 
 
