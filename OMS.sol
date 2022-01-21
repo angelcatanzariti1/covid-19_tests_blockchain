@@ -93,4 +93,21 @@ contract HealthCenter{
         ContractAddress = address(this);
     }
 
+    //Mapping of patient's ID (hash) => COVID test results
+    mapping(bytes32 => bool) COVIDTestResults;
+
+    //Mapping of test hash => IPFS code of PDF
+    mapping(bytes32 => string) PCR_Result_IPFS;
+
+    //Events
+    event NewResult(string, bool);
+
+    //Restrict functions to health center
+    modifier HCOnly(address _address){
+        require(_address == HC_address, "Forbidden.");
+        _;
+    }
+
+
+
 }
