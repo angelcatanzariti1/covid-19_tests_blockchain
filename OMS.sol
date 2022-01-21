@@ -101,7 +101,12 @@ contract HealthCenter{
         string file_IPFS;
     }
 
-    //Patient => results
+    /*
+        Patient => results array
+        A patient's address hash is stored.
+        a single patient can have multiple tests stored, identified by ID and date
+        dates are managed as timestamps, a conversion is needed in frontend
+    */
     mapping(bytes32 => COVIDTestResults[]) PatientResults;
 
     //Events
@@ -123,6 +128,17 @@ contract HealthCenter{
 
         //Event
         emit NewResult(_testResult, _IPFScode);
+    }
+
+    //View a patien't result
+    function MyResults(string memory _patientID) public view returns(COVIDTestResults[] memory){
+        //Patient's ID hash
+        bytes32 hash_patientID = keccak256(abi.encodePacked(_patientID));
+
+        //Check if the patient's results were loaded
+        require(PatientResults[hash_patientID].length > 0, "No results available.");
+
+        return(PatientResults[hash_patientID]);        
     }
 
 
